@@ -2,7 +2,7 @@
 Author: huibing 13728166372@163.com
 Date: 2023-02-14 20:18:22
 LastEditors: huibing 13728166372@163.com
-LastEditTime: 2023-02-17 02:43:29
+LastEditTime: 2023-02-17 03:16:29
 FilePath: /undefined/Users/huibinglin/comp7940-lab3/chatbot.py
 Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 '''
@@ -40,6 +40,7 @@ def main():
     # on different commands - answer in Telegram
     dispatcher.add_handler(CommandHandler("add", add))
     dispatcher.add_handler(CommandHandler("help", help_command))
+    dispatcher.add_handler(CommandHandler("hello", hello))
    
     # To start the bot:
     updater.start_polling()
@@ -68,6 +69,18 @@ def add(update: Update, context: CallbackContext) -> None:
 redis1.get(msg).decode('UTF-8') + ' times.')
     except (IndexError, ValueError):
         update.message.reply_text('Usage: /add <keyword>')
+
+def hello(update: Update, context: CallbackContext) -> None:
+    """Send a message when the command /hello is issued."""
+    try:
+        global redis1
+        logging.info(context.args[0])
+        msg = context.args[0]   # /hello keyword <-- this should store the keyword
+        redis1.incr(msg)
+        update.message.reply_text('Good day, ' + msg + '!')
+    except (IndexError, ValueError):
+        update.message.reply_text('Usage: /hello <keyword>')
+
 
 if __name__ == '__main__':
     main()
