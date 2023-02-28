@@ -2,7 +2,7 @@
 Author: huibing 13728166372@163.com
 Date: 2023-02-14 20:18:22
 LastEditors: huibing 13728166372@163.com
-LastEditTime: 2023-02-17 03:16:29
+LastEditTime: 2023-02-28 20:52:14
 FilePath: /undefined/Users/huibinglin/comp7940-lab3/chatbot.py
 Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 '''
@@ -11,7 +11,8 @@ Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查�
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 
-import configparser
+# import configparser
+import os
 import logging
 import redis
 
@@ -19,14 +20,19 @@ global redis1
 
 def main():
     # Load your token and create an Updater for your Bot
-    config = configparser.ConfigParser()
-    config.read('config.ini')
-    updater = Updater(token=(config['TELEGRAM']['ACCESS_TOKEN']), use_context=True)
+    # config = configparser.ConfigParser()
+    # config.read('config.ini')
+    # updater = Updater(token=(config['TELEGRAM']['ACCESS_TOKEN']), use_context=True)
+    # dispatcher = updater.dispatcher
+    updater = Updater(token=(os.environ['ACCESS_TOKEN']), use_context=True)
     dispatcher = updater.dispatcher
 
+
     global redis1
-    redis1 = redis.Redis(host=(config['REDIS']['HOST']), password=(config['REDIS']
-['PASSWORD']), port=(config['REDIS']['REDISPORT']))
+#     redis1 = redis.Redis(host=(config['REDIS']['HOST']), password=(config['REDIS']
+# ['PASSWORD']), port=(config['REDIS']['REDISPORT']))
+    redis1 = redis.Redis(host=(os.environ['HOST']), password=
+(os.environ['PASSWORD']), port=(os.environ['REDISPORT']))
     
     # You can set this logging module, so you will know when and why things do not work as expected
  
